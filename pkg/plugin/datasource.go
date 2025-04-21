@@ -9,7 +9,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
-// Make sure Datasource implements required interfaces
+// Datasource implements required interfaces
 var (
 	_ backend.QueryDataHandler      = (*Datasource)(nil)
 	_ backend.CheckHealthHandler    = (*Datasource)(nil)
@@ -52,7 +52,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 func (d *Datasource) query(_ context.Context, _ backend.PluginContext, query backend.DataQuery) backend.DataResponse {
 	var response backend.DataResponse
 
-	// Create a simple time series with mock data
+	// Creating a simple time series with mock data
 	frame := data.NewFrame("response")
 
 	// Generate 20 data points from the query time range
