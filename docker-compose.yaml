@@ -1,0 +1,10 @@
+services:
+  grafana:
+    extends:
+      file: .config/docker-compose-base.yaml
+      service: grafana
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+      - ./dist:/var/lib/grafana/plugins/compunnel-custommetrics-datasource
+    ports:
+      - "3001:3000"  # To avoid conflict with metrics server

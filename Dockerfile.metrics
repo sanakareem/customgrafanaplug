@@ -1,0 +1,16 @@
+FROM node:16-alpine
+
+WORKDIR /app
+
+# Create package.json
+RUN echo '{ "name": "metrics-server", "version": "1.0.0", "scripts": { "start": "node metrics-server.js" }, "dependencies": { "express": "^4.18.2", "cors": "^2.8.5" } }' > package.json
+
+# Install dependencies
+RUN npm install
+
+# Copy server file
+COPY metrics-server.js .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
