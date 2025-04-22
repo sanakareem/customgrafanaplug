@@ -15,7 +15,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
     // Ensure the endpoint includes the protocol (http://)
-    this.endpoint = instanceSettings.jsonData.path || 'http://localhost:3001';
+    this.endpoint = instanceSettings.jsonData.path || 'http://host.docker.internal:3001';
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
