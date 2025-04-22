@@ -7,7 +7,7 @@
   "backend": true,
   "executable": "gpx_custom_metrics_datasource",
   "info": {
-    "description": "",
+    "description": "Datasource for custom metrics",
     "author": {
       "name": "Compunnel"
     },
@@ -18,11 +18,28 @@
     },
     "links": [],
     "screenshots": [],
-    "version": "%VERSION%",
-    "updated": "%TODAY%"
+    "version": "1.0.0",
+    "updated": "2025-04-21"
   },
   "dependencies": {
     "grafanaDependency": ">=10.4.0",
     "plugins": []
-  }
+  },
+  "routes": [
+    {
+      "path": "metrics",
+      "method": "GET",
+      "url": "{{ .JsonData.path }}/metrics",
+      "headers": [
+        {
+          "name": "Accept",
+          "content": "application/openmetrics-text"
+        },
+        {
+          "name": "Authorization",
+          "content": "Bearer {{ .SecureJsonData.apiKey }}"
+        }
+      ]
+    }
+  ]
 }

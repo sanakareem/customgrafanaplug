@@ -1,45 +1,45 @@
 import React, { ChangeEvent } from 'react';
-import { InlineField, Input, Stack } from '@grafana/ui';
+import { InlineField, Input } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
-import { DataSource } from '../datasource';
-import { MyDataSourceOptions, MyQuery } from '../types';
+import type { DataSource } from 'datasource';
+import { MyDataSourceOptions, MyQuery } from 'types';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export function QueryEditor({ query, onChange, onRunQuery }: Props) {
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange({ ...query, queryText: event.target.value });
+    onChange({ ...query, metricName: event.target.value });
   };
 
   const onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange({ ...query, constant: parseFloat(event.target.value) });
-    // executes the query
+    onChange({ ...query, constant: parseInt(event.target.value, 10) });
+    // Only execute the query when the constant changes
     onRunQuery();
   };
 
-  const { queryText, constant } = query;
+  const { metricName, constant } = query;
 
   return (
-    <Stack gap={0}>
-      <InlineField label="Constant">
+    <div className="gf-form">
+      <InlineField label="Query Text" labelWidth={16} tooltip="Enter the metric name to query">
         <Input
-          id="query-editor-constant"
-          onChange={onConstantChange}
-          value={constant}
-          width={8}
-          type="number"
-          step="0.1"
-        />
-      </InlineField>
-      <InlineField label="Query Text" labelWidth={16} tooltip="Not used yet">
-        <Input
-          id="query-editor-query-text"
+          width={32}
+          value={metricName || ''}
           onChange={onQueryTextChange}
-          value={queryText || ''}
-          required
-          placeholder="Enter a query"
+          placeholder="Metric name"
+          aria-label="Query Text"
         />
       </InlineField>
-    </Stack>
+      <InlineField label="Constant" labelWidth={16} tooltip="Constant value">
+        <Input
+          width={32}
+          type="number"
+          value={constant || 0}
+          onChange={onConstantChange}
+          placeholder="Constant value"
+          aria-label="Constant"
+        />
+      </InlineField>
+    </div>
   );
 }

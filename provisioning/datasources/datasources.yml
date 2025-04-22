@@ -4,11 +4,11 @@ datasources:
   - name: 'Custom Metrics Datasource'
     type: 'compunnel-custommetrics-datasource'
     access: proxy
-    isDefault: false
+    isDefault: true
     orgId: 1
     version: 1
     editable: true
     jsonData:
-      path: '/resources'
+      path: 'http://host.docker.internal:3001'  
     secureJsonData:
-      apiKey: 'api-key'
+      apiKey: 'test-api-key'

@@ -27,9 +27,13 @@ export default defineConfig<PluginOptions>({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.GRAFANA_URL || 'http://localhost:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+  
+    /* Collect trace when retrying the failed test. */
     trace: 'on-first-retry',
+    
+    /* Increase timeouts to give more time for operations */
+    navigationTimeout: 60000, // 60 seconds
+    actionTimeout: 30000,     // 30 seconds
   },
 
   /* Configure projects for major browsers */

@@ -1,34 +1,34 @@
 import React, { ChangeEvent } from 'react';
 import { InlineField, Input, SecretInput } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { MyDataSourceOptions, MySecureJsonData } from '../types';
+import { MyDataSourceOptions, MySecureJsonData } from 'types';
 
 interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions, MySecureJsonData> {}
 
 export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
-  const { jsonData, secureJsonFields, secureJsonData } = options;
-
+  
+  // Path update handler
   const onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
-      jsonData: {
-        ...jsonData,
-        path: event.target.value,
-      },
-    });
+    const jsonData = {
+      ...options.jsonData,
+      path: event.target.value,
+    };
+    onOptionsChange({ ...options, jsonData });
   };
 
-  // Secure field (only sent to the backend)
+  // API key update handler
   const onAPIKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
     onOptionsChange({
       ...options,
       secureJsonData: {
+        ...options.secureJsonData,
         apiKey: event.target.value,
       },
     });
   };
 
+  // Reset API key handler
   const onResetAPIKey = () => {
     onOptionsChange({
       ...options,
@@ -43,29 +43,32 @@ export function ConfigEditor(props: Props) {
     });
   };
 
+  const { jsonData, secureJsonFields } = options;
+  const secureJsonData = (options.secureJsonData || {}) as MySecureJsonData;
+
   return (
-    <>
-      <InlineField label="Path" labelWidth={14} interactive tooltip={'Json field returned to frontend'}>
+    <div className="gf-form-group">
+      <InlineField label="Path" labelWidth={12} tooltip="Base URL for the metrics server (e.g., http://localhost:3001)">
         <Input
-          id="config-editor-path"
-          onChange={onPathChange}
-          value={jsonData.path}
-          placeholder="Enter the path, e.g. /api/v1"
           width={40}
+          value={jsonData.path || ''}
+          placeholder="http://localhost:3001"
+          onChange={onPathChange}
+          aria-label="Path"
         />
       </InlineField>
-      <InlineField label="API Key" labelWidth={14} interactive tooltip={'Secure json field (backend only)'}>
+
+      <InlineField label="API Key" labelWidth={12} tooltip="API key for authentication">
         <SecretInput
-          required
-          id="config-editor-api-key"
-          isConfigured={secureJsonFields.apiKey}
-          value={secureJsonData?.apiKey}
-          placeholder="Enter your API key"
           width={40}
+          isConfigured={(secureJsonFields && secureJsonFields.apiKey) as boolean}
+          value={secureJsonData.apiKey || ''}
+          placeholder="API key"
           onReset={onResetAPIKey}
           onChange={onAPIKeyChange}
+          aria-label="API Key"
         />
       </InlineField>
-    </>
+    </div>
   );
 }

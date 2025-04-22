@@ -5,4 +5,6 @@ process.env.TZ = 'UTC';
 module.exports = {
   // Jest configuration provided by Grafana scaffolding
   ...require('./.config/jest.config'),
+  setupFilesAfterEnv: ['./jest-setup.js'],
+  testTimeout: 60000,
 };

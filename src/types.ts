@@ -2,33 +2,57 @@ import { DataSourceJsonData } from '@grafana/data';
 import { DataQuery } from '@grafana/schema';
 
 export interface MyQuery extends DataQuery {
-  queryText?: string;
-  constant: number;
+  /**
+   * The Prometheus metric name to query
+   * Example: 'test_metric'
+   */
+  metricName: string;
+
+  /**
+   * Label filters as key-value pairs
+   * Example: {name: "default"}
+   */
+  labelFilters?: Record<string, string>;
+
+  /**
+   * Constant value for the query
+   */
+  constant?: number;
 }
 
 export const DEFAULT_QUERY: Partial<MyQuery> = {
-  constant: 6.5,
+  metricName: 'test_metric',
+  labelFilters: { name: 'default' },
+  constant: 0
 };
 
-export interface DataPoint {
-  Time: number;
-  Value: number;
+export interface PrometheusSample {
+  timestamp: number;
+  value: number;
+  labels?: Record<string, string>;
 }
 
-export interface DataSourceResponse {
-  datapoints: DataPoint[];
-}
-
-/**
- * These are options configured for each DataSource instance
- */
 export interface MyDataSourceOptions extends DataSourceJsonData {
-  path?: string;
+  /**
+   * Base URL of your metrics server
+   * Example: "http://localhost:3000"
+   */
+  path: string;
+
+  /**
+   * Metrics path (default: '/metrics')
+   */
+  metricsPath?: string;
+
+  /**
+   * Scrape interval in seconds
+   */
+  scrapeInterval?: number;
 }
 
-/**
- * Value that is used in the backend, but never sent over HTTP to the frontend
- */
 export interface MySecureJsonData {
+  /**
+   * API key for authentication
+   */
   apiKey?: string;
 }
